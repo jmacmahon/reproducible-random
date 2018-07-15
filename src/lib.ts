@@ -4,20 +4,18 @@ type Seed = number
 export type ConsoleLog = (message?: any, ...optionalParams: any[]) => void
 export type CreateRandom = (providedMasterSeed?: Seed) => Random
 export type SeedGenerator = () => Seed
+export type ProcessEnv = NodeJS.ProcessEnv
 
-export const generateSeed: SeedGenerator = () => {
+const generateSeed: SeedGenerator = () => {
   return Random().integer(-(2 ** 53), 2 ** 53)
 }
-export function createRandomContext (consoleLog: ConsoleLog = console.log, seedGenerator: SeedGenerator = generateSeed): CreateRandom {
+
+export function createRandomContext (seedGenerator: SeedGenerator = generateSeed, consoleLog: ConsoleLog = console.log): CreateRandom {
   let masterRandom: Random | undefined
-  function createRandom (providedSeed?: Seed) {
+  function createRandom () {
     if (masterRandom === undefined) {
       let seed: Seed
-      if (providedSeed !== undefined) {
-        seed = providedSeed
-      } else {
-        seed = seedGenerator()
-      }
+      seed = seedGenerator()
       consoleLog(`RANDOM_SEED=${seed}`)
       const engine = Random.engines.mt19937()
       engine.seed(seed)
@@ -26,4 +24,19 @@ export function createRandomContext (consoleLog: ConsoleLog = console.log, seedG
     return masterRandom
   }
   return createRandom
+}
+
+export function generateSeedContext (processEnv: ProcessEnv = process.env, defaultSeedGenerator: SeedGenerator = generateSeed): SeedGenerator {
+  const randomSeedEnv = processEnv['RANDOM_SEED']
+  if (randomSeedEnv !== undefined) {
+    const parsedSeed = parseInt(randomSeedEnv, 10)
+    if (!isNaN(parsedSeed)) {
+      return () => parsedSeed
+    }
+  }
+  return defaultSeedGenerator
+}
+
+export default function createRandom () {
+  return createRandomContext(generateSeedContext())
 }
