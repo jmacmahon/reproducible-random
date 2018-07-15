@@ -2,26 +2,25 @@ import * as Random from 'random-js'
 
 type Seed = number
 export type ConsoleLog = (message?: any, ...optionalParams: any[]) => void
-export type CreateRandom = (providedMasterSeed?: Seed) => { masterSeed: Seed }
+export type CreateRandom = (providedMasterSeed?: Seed) => Random
+export type SeedGenerator = () => Seed
 
-export function createRandomContext (consoleLog: ConsoleLog = console.log): CreateRandom {
-  let masterSeed: Seed
+export function createRandomContext (consoleLog: ConsoleLog = console.log, seedGenerator: SeedGenerator = generateSeed): CreateRandom {
+  let masterSeed: Seed | undefined
   function createRandom (providedMasterSeed?: Seed) {
     if (masterSeed === undefined) {
       if (providedMasterSeed !== undefined) {
         masterSeed = providedMasterSeed
       } else {
-        masterSeed = generateSeed()
+        masterSeed = seedGenerator()
       }
       consoleLog(`RANDOM_SEED=${masterSeed}`)
     }
-    return {
-      masterSeed,
-    }
+    return Random()
   }
   return createRandom
 }
 
-function generateSeed (): Seed {
+export const generateSeed: SeedGenerator = () => {
   return Random().integer(-(2 ** 53), 2 ** 53)
 }

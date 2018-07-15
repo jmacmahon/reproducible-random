@@ -1,21 +1,22 @@
 import { expect } from 'chai'
 import sinon = require('sinon')
-import { createRandomContext, CreateRandom, ConsoleLog } from '../../src'
+import { createRandomContext, CreateRandom, ConsoleLog, SeedGenerator } from '../../src'
 
-describe('the thing', () => {
+describe('createRandom', () => {
   let createRandom: CreateRandom
   let fakeConsoleLog: ConsoleLog
+  let fakeSeedGenerator: SeedGenerator
 
   beforeEach(() => {
     fakeConsoleLog = sinon.spy()
-    createRandom = createRandomContext(fakeConsoleLog)
+    fakeSeedGenerator = sinon.stub().returns(12345)
+    createRandom = createRandomContext(fakeConsoleLog, fakeSeedGenerator)
   })
 
   describe('on first call', () => {
     it('should generate and output a master seed', () => {
-      const random = createRandom()
-      expect(random.masterSeed).to.not.equal(undefined)
-      expect(fakeConsoleLog).to.have.been.calledWith(`RANDOM_SEED=${random.masterSeed}`)
+      createRandom()
+      expect(fakeConsoleLog).to.have.been.calledWith(`RANDOM_SEED=12345`)
     })
 
     it('should handle a provided master seed value', () => {
@@ -32,9 +33,23 @@ describe('the thing', () => {
     })
 
     it('should use the same master seed', () => {
-      const random1 = createRandom()
-      const random2 = createRandom()
-      expect(random1.masterSeed).to.equal(random2.masterSeed)
+      createRandom()
+      createRandom()
+      expect(fakeSeedGenerator).to.have.callCount(1)
     })
+  })
+})
+
+describe('returned random generator', () => {
+  let createRandom: CreateRandom
+
+  beforeEach(() => {
+    createRandom = createRandomContext()
+  })
+
+  it('should return a random generator object', () => {
+    const random = createRandom()
+    expect(random.integer(-100, 100)).to.be.within(-100, 99)
+    expect(random.bool()).to.be.oneOf([true, false])
   })
 })
