@@ -1,6 +1,6 @@
 import { expect } from 'chai'
-import sinon = require('sinon')
-import { createRandomContext, CreateRandom, ConsoleLog, SeedGenerator, ProcessEnv, generateSeedContext } from '../../src/lib'
+import * as sinon from 'sinon'
+import { createRandomContext, CreateRandom, ConsoleLog, SeedGenerator, ProcessEnv, generateSeedContext } from '../../src/reproducible-random'
 
 describe('state tracking', () => {
   let createRandom: CreateRandom
