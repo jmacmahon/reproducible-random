@@ -6,6 +6,10 @@
   "types": "build/src/lib.d.ts",
   "author": "Joe MacMahon <joe@macmahon.eu>",
   "license": "LGPL-3.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jmacmahon/reproducible-random"
+  },
   "devDependencies": {
     "@types/chai": "^4.1.4",
     "@types/mocha": "^5.2.4",
