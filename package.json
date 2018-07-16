@@ -1,6 +1,6 @@
 {
   "name": "reproducible-random",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "Wrapper around random-js for reproducibility",
   "main": "build/src/lib.js",
   "types": "build/src/lib.d.ts",
