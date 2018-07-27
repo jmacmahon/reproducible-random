@@ -1,4 +1,5 @@
 import { createRandomContext, generateSeedContext, CreateRandom } from './reproducible-random'
 
-const createRandom: CreateRandom = createRandomContext(generateSeedContext())
+export const createRandom: CreateRandom = createRandomContext(generateSeedContext())
+export const random: Random = createRandom()
 export default createRandom
