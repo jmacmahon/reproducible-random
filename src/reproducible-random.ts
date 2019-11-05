@@ -1,4 +1,4 @@
-import * as Random from 'random-js'
+import { Random, MersenneTwister19937 } from 'random-js'
 
 type Seed = number
 export type ConsoleLog = (message?: any, ...optionalParams: any[]) => void
@@ -7,7 +7,7 @@ export type SeedGenerator = () => Seed
 export type ProcessEnv = NodeJS.ProcessEnv
 
 const generateSeed: SeedGenerator = () => {
-  return Random().integer(-(2 ** 53), 2 ** 53)
+  return new Random().integer(-(2 ** 53), 2 ** 53)
 }
 
 export function createRandomContext (seedGenerator: SeedGenerator = generateSeed, consoleLog: ConsoleLog = console.log): CreateRandom {
@@ -17,9 +17,9 @@ export function createRandomContext (seedGenerator: SeedGenerator = generateSeed
       let seed: Seed
       seed = seedGenerator()
       consoleLog(`RANDOM_SEED=${seed}`)
-      const engine = Random.engines.mt19937()
-      engine.seed(seed)
-      masterRandom = Random(engine)
+      MersenneTwister19937.seed(seed)
+      const engine = MersenneTwister19937.seed(seed)
+      masterRandom = new Random(engine)
     }
     return masterRandom
   }
