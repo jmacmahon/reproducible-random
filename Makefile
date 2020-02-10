@@ -2,7 +2,7 @@ export PATH := $(shell pwd)/node_modules/.bin:$(PATH)
 
 .PHONY: test build unit lint
 
-test: build unit lint
+test: build unit lint audit
 
 build:
 	rm -rf build
@@ -13,3 +13,6 @@ unit:
 
 lint:
 	./node_modules/.bin/tslint --config tslint.json --project ./ --fix
+
+audit:
+	npm audit --audit-level=moderate

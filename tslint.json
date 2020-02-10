@@ -12,7 +12,8 @@
     "rules": {
       "no-unused-variable": false,
       "no-unsafe-any": true,
-      "trailing-comma": [true, {"multiline": "always", "singleline": "never"}]
+      "trailing-comma": [true, {"multiline": "always", "singleline": "never"}],
+      "strict-boolean-expressions":true
     },
     "rulesDirectory": []
 }

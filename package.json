@@ -13,7 +13,7 @@
   "devDependencies": {
     "@types/chai": "^4.2.4",
     "@types/mocha": "^5.2.7",
-    "@types/node": "^8.10.58",
+    "@types/node": "^10.17.14",
     "@types/sinon": "^7.5.0",
     "@types/sinon-chai": "^3.2.3",
     "chai": "^4.2.0",
